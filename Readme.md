@@ -1,4 +1,4 @@
-## Aplicaicones basica de RestServer
+## Aplicaciones basica de RestServer
 
 ```
 npm install
