@@ -1,4 +1,6 @@
 const express = require('express')
+const mongoose = require('mongoose')
+
 const app = express()
 const bodyParser = require('body-parser')
 
@@ -37,6 +39,16 @@ app.put('/usuario/:id', function(req, res) {
 app.delete('/usuario', function(req, res) {
     res.json('DELETE usarios')
 })
+
+
+//Forma de conexionde mongoDB en forma local)(hay qeu definir el puerto)
+//mongoose.connect('mongodb://localhost:(puerto por definir)/my_database', (err, res) => {
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
+    if (err) throw err;
+    console.log('Base de Datos ONLINE!!!');
+
+})
+
 
 let port = process.env.PORT
 app.listen(port, () => {
