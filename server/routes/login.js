@@ -1,5 +1,6 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const Usuario = require('../models/usuario')
 const app = express()
 
@@ -34,15 +35,16 @@ app.post('/login', (req, res) => {
             })
         }
 
+        let token = jwt.sign({
+            usuario: usuariodb
+        }, process.env.SEED_TOKEN, { expiresIn: process.env.CADUCIDAD_TOKEN })
+
         res.json({
             ok: true,
             usuario: usuariodb,
-            token: '123'
+            token //: token  Cuando uno quiere colocar un valor del mismo nombre en ES6 es redundante  
         })
     })
 })
-
-
-
 
 module.exports = app
