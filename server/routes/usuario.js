@@ -37,6 +37,7 @@ app.get('/usuario', verificarToken, (req, res) => {
 
     //res.json('GET usarios')
 })
+
 app.post('/usuario', [verificarToken, verificaAdmin_Role], function(req, res) {
 
     let body = req.body
@@ -72,8 +73,6 @@ app.put('/usuario/:id', [verificarToken, verificaAdmin_Role], function(req, res)
 
     )
 
-
-
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
         if (err) {
@@ -90,6 +89,7 @@ app.put('/usuario/:id', [verificarToken, verificaAdmin_Role], function(req, res)
 
     })
 })
+
 app.delete('/usuario/:id', [verificarToken, verificaAdmin_Role], function(req, res) {
 
     let id = req.params.id
@@ -121,7 +121,7 @@ app.delete('/usuario/:id', [verificarToken, verificaAdmin_Role], function(req, r
             })
 
         })
-        //res.json('DELETE usarios')
+        //res.json('DELETE usuarios')
 })
 
 

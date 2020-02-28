@@ -20,37 +20,40 @@
       Bootstrap
     </a>
   </nav>
-  <h1>Bienvenidos a este sitio.</h1>
-  <div class="container">
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Bienvenidos a mi Primer API</h1>
+      <p class="lead">Esta Api esta hecha con los cursos de Udemy.</p>
+      <div class="row">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      </div><a href="#" onclick="signOut();">Sign out</a>
+    </div>
   </div>
-  
-
+ 
   <script>
-      function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-     
-     
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log(id_token);       
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/google');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          console.log('Signed in as: ' + xhr.responseText);
-        };
-        xhr.send('idtoken=' + id_token);
-     
-     
-      }
-  </script>
-
-  <a href="#" onclick="signOut();">Sign out</a>
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+   
+   
+      var id_token = googleUser.getAuthResponse().id_token;
+      console.log(id_token);       
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/google');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.onload = function() {
+        console.log('Signed in as: ' + xhr.responseText);
+      };
+      xhr.send('idtoken=' + id_token);
+   
+   
+    }
+</script>
 
   <script>
     function signOut() {
