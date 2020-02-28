@@ -7,3 +7,5 @@ npm install
 - Adapatado para negocios pequeños como tiendas (ejemplo Cafeterias , heladerias , entre esas cosas)
 
 url de la APP https://alfarestserver.herokuapp.com/
+
+tag de la APP https://github.com/ecorrea343/node-restserver/releases
