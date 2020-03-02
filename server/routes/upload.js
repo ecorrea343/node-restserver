@@ -5,6 +5,9 @@ const app = express();
 const Usuario = require('../models/usuario');
 const Producto = require('../models/producto');
 
+const fs = require('fs');
+const path = require('path');
+
 //Default options
 app.use(fileUpload());
 
@@ -58,7 +61,7 @@ app.put('/upload/:tipo/:id', function(req, res) {
     //188888kuassasdasd-123.jpg
     let nombreArchivo = `${ id }-${ new Date().getMilliseconds() }.${ extension }`;
 
-
+    //salida ficticia : 1234567abc-961.jpg
     archivo.mv(`uploads/${ tipo }/${ nombreArchivo }` , (err) => {
 
         if (err) {
@@ -68,16 +71,120 @@ app.put('/upload/:tipo/:id', function(req, res) {
             })
         }
 
-        res.json({
+        //Aqui se qeu se subio la imagen
 
-            ok:true,
-            message:'Archivo cargado satisfactoriamente',
-        
-        })
+        (tipo == 'usuarios') ? imagenUsuario(id, res, nombreArchivo) : imagenProducto( id, res, nombreArchivo )
 
     })
 
 })
 
+
+function imagenUsuario(id, res, nombreArchivo){
+
+    Usuario.findById(id, (err, usuarioDB) =>{
+
+        if (err) {
+            borraArchivo('usuarios', nombreArchivo )
+            return res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if (!usuarioDB) {
+            borraArchivo('usuarios', nombreArchivo )
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message:'Usuario No existe',
+                }
+            })
+        }
+
+        borraArchivo('usuarios', usuarioDB.img)
+
+        usuarioDB.img = nombreArchivo;
+
+        usuarioDB.save( (err, usuarioGuardado) =>{
+
+            if (err) {
+                res.status(500).json({
+                    ok:false,
+                    message:'Error en la linea 121',
+                    err
+                })
+            }
+
+            res.json({
+                ok:true,
+                usuario:usuarioGuardado,
+                img:nombreArchivo
+            })
+
+        })
+
+    })
+
+}
+
+function imagenProducto( id, res, nombreArchivo ){
+
+    Producto.findById(id, (err, productoDB) =>{
+
+        if (err) {
+            borraArchivo('productos', nombreArchivo )
+            return res.status(500).json({
+                ok:false,
+                err
+            })
+        }
+
+        if (!productoDB) {
+            borraArchivo('productos', nombreArchivo )
+            return res.status(400).json({
+                ok:false,
+                err:{
+                    message:'Producto No existe',
+                }
+            })
+        }
+
+        borraArchivo('productos', productoDB.img)
+
+        productoDB.img = nombreArchivo;
+
+        productoDB.save( (err, productoGuardado ) =>{
+
+            if (err) {
+                res.status(500).json({
+                    ok:false,
+                    message:'Error en la linea 169',
+                    err
+                })
+            }
+
+            res.json({
+                ok:true,
+                producto:productoGuardado,
+                img:nombreArchivo
+            })
+
+        })
+
+    })
+
+}
+
+function borraArchivo(carpeta, nombreImagen){
+
+    let pathImagen = path.resolve(__dirname, `../../uploads/${ carpeta }/${ nombreImagen }`);
+
+    if (fs.existsSync( pathImagen )) {
+        
+        fs.unlinkSync(pathImagen);
+    }
+
+}
 
 module.exports = app;
